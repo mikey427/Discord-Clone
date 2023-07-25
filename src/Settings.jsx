@@ -1,7 +1,10 @@
-import { React, useState } from "react";
+import { React, useState, useContext } from "react";
 import { supabase } from "./supabaseClient";
+import SessionContext from "./SessionContext";
 
-export default function Settings({ session, settingsToggle, user }) {
+export default function Settings({ settingsToggle }) {
+	const { user } = useContext(SessionContext);
+	const { session } = useContext(SessionContext);
 	const [editingProfilePic, setEditingProfilePic] = useState(false);
 	const [editingDisplayName, setEditingDisplayName] = useState(false);
 	const [editingBio, setEditingBio] = useState(false);

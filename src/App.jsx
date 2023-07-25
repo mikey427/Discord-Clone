@@ -1,17 +1,19 @@
 import "./App.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { supabase } from "./supabaseClient";
+import { SessionProvider } from "./SessionContext";
 import Auth from "./Auth";
 import Account from "./Account";
 import Navbar from "./Navbar";
 import Spinner from "./Spinner";
 import Settings from "./Settings";
+import SessionContext from "./SessionContext";
 
 function App() {
-	const [session, setSession] = useState(null);
 	const [settings, setSettings] = useState(false);
-	const [user, setUser] = useState();
 	const [loading, setLoading] = useState(false);
+	const { user, setUser } = useContext(SessionContext);
+	const { session, setSession } = useContext(SessionContext);
 
 	function settingsToggle() {
 		setSettings(!settings);
@@ -49,9 +51,13 @@ function App() {
 		<div className="container" style={{ padding: "50px 0 100px 0" }}>
 			{!session ? (
 				<Auth />
-			) : loading ? (<Spinner />) : settings ? (<Settings session={session} settingsToggle={settingsToggle} user={user} />) : (
-				<div key={session.user.id} session={session}>
-					<Navbar session={...session} settingsToggle={settingsToggle} userData={user} />
+			) : loading ? (
+				<Spinner />
+			) : settings ? (
+				<Settings settingsToggle={settingsToggle} />
+			) : (
+				<div>
+					<Navbar settingsToggle={settingsToggle} />
 					<button
 						onClick={() => {
 							setSession(null);

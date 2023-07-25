@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { supabase } from "./supabaseClient";
+import SessionContext from "./SessionContext.jsx";
 
 export default function Auth() {
 	const [loading, setLoading] = useState(false);
@@ -7,6 +8,7 @@ export default function Auth() {
 	const [password, setPassword] = useState("");
 	const [login, setLogin] = useState(true);
 	const [passwordConfirm, setPasswordConfirm] = useState("");
+	const { session, setSession } = useContext(SessionContext);
 
 	const handleSignup = async (event) => {
 		event.preventDefault();
@@ -22,7 +24,7 @@ export default function Auth() {
 				alert("Please verify your email.");
 			}
 			setLoading(false);
-			console.log(data);
+			// console.log(data);
 		} else {
 			alert("Password fields must match.");
 		}
@@ -47,8 +49,10 @@ export default function Auth() {
 		});
 		if (error) {
 			alert(error.error_description || error.message);
+		} else {
+			setSession(data);
 		}
-		console.log(data);
+		// console.log(data);
 		setLoading(false);
 	};
 
